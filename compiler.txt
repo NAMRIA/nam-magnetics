@@ -1,0 +1,67 @@
+..\..\data\sec2min.f
+gfortran "D:\ghelo\projects\magnetics\data\sec2min.f"
+
+
+
+
+
+GCC Wiki
+   
+Login
+Self GFortranUsage
+HomePageRecentChangesFindPageHelpContentsGFortranUsage
+Immutable PageInfoAttachments  
+GNU Fortran: Using the compiler
+
+This page is meant to give a quick overview on how to use GNU Fortran. It is not a substitute for a complete manual, but it should get you going.
+
+GNU Fortran builds on GCC, and thus shares most characteristics with it. If you know how to use GCC, there will not be much new information for you in this document. Especially, the options for optimization and the generation of debugging information are not outlined here.
+
+Don't forget to read the wiki page about frequently encountered trouble with GNU Fortran, too!
+
+Basic Usage
+
+GNU Fortran is used to compile a source file, source.f90 to an object file, object.o or an executable, executable Along the way it generates module description files for the modules it encounters. These files are named nameofmodule.mod If a module is used, gfortran will read from these same files.
+
+In order to compile the source file source.f90 one would run:
+
+
+gfortran -c source.f90
+The output file will automatically be named source.o This is an object file, which cannot be executed.
+
+Once you have compiled some source files, you can link them together with the necessary libraries to generate an executable. This is done as follows:
+
+
+gfortran -o executable object1.o object2.o ...
+where the the executable will be named executable and the objectN.o are object files, which may have been created as above, or equally well by another compiler from sources in a different language. If -o executable is omitted, the executable will be named a.out (on cygwin systems: a.exe . The executable may then be executed like any other program.
+
+One may also skip the separate compilation step, and enter a command such as:
+
+
+gfortran -o executable source1.f90 source2.f90
+which will compile the source files source1.f90 and source2.f90, link and generate the executable executable in one step. You can also put object files on this command line, they will be automatically linked in during the link step.
+
+Controlling the input source form
+
+Since Fortran 95 allows for two different kinds of input source forms (free form source code and fixed form source code) the compiler has to know which kind of input it is given. The rule in place is as follows:
+
+Files whose name ends in .f or .for are assumed to be fixed form
+Files whose name end in .f90 or .f95 are assumed to to be free form
+For other files the source form has to be explicitly given. This may be done by the command line options described below, which may also be used to override the first two rules.
+When GNU Fortran is run on a file whose name ends in .f90 or .f95, it assumes a free form source file. If that file actually is a fixed form source file, the user has to give the -ffixed-form command line option. The precise semantics of this option, and other options relating to fixed form versus free form input are the same as in g77, and may be found in g77's documentation.
+
+When running gfortran one actually does not run the compiler, but the compiler driver. This driver interprets the command line options given, and hands the work off to the actual compiler, the assembler, and the linker. By default, this compiler driver decides by the extensions of the given file names what to do. A file named foo.c is handed to the C compiler and a file named foo.f90 is handed to the Fortran 95 compiler, etc. To overrule this behavior, one has to precede the filename by the argument -x lang where lang is a string identifying the requested language. For Fortran 95 this is f95
+
+Compatibility with g77
+
+In order to efficiently implement the passing of array sections, binary compatibility to Fortran 77 had to be abandoned. You should not mix object files produced by g77 and gfortran, because this will not result in a working executable.
+
+Running GNU Fortran as a syntax checking tool
+
+One may use GNU Fortran as a syntax checker (or verify that GNU Fortran's frontend correctly accepts or rejects a program), by specifying -fsyntax-only on the command line. Gfortran will then not generate object files.
+
+When given the command line option -fdump-parse-tree gfortran will print a representation of the parsed program, detailing both the data objects and the executable statements of the program in a Lisp-inspired notation. One remark for Fortran old timers: ASSIGN in these dumps does not refer to the ASSIGN statement, but to the operation of assignment, i.e. sloppily speaking, the = operator.
+
+None: GFortranUsage (last edited 2013-08-23 15:36:50 by JonathanWakely)
+Immutable PageInfoAttachments  
+MoinMoin PoweredPython PoweredGPL licensedValid HTML 4.01
